@@ -1,0 +1,44 @@
+<div ng-controller="OrdersController">
+   <h1> Orders and Costomers</h1>
+   <h4>Add a new order</h4>
+   <form>
+        Customer : <select ng-model='new_order.name' 
+        class="ng-valid ng-dirty">
+          <option value="Payal Patel">Payal Patel</option>
+          <option value="Kruti Vyas">Kruti Vyas</option>
+          <option value="Riya Shah">Riya Shah</option>
+          <option value="Ved Ami">Ved Ami</option>
+        </select>
+        <br>Order: <select ng-model='new_order.product' 
+        class="ng-valid ng-dirty">
+          <option value="Dell Laptop">Dell Laptop</option>
+          <option value="Mac Laptop">Mac Laptop</option>
+          <option value="SAmsung Laptop">Samsung Laptop</option>
+          <option value="IBM Laptop">IBM Laptop</option>
+        <select>
+        <select ng-model='new_order.quantity' 
+        class="ng-valid ng-dirty">
+          <option value="10">10</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="9">9</option>
+        </select>
+        <br><input type='submit' value='order' ng-click='addOrder()'>
+    </form>
+Search Customers: <input type="text" ng-model="filter_name">
+
+  <table>
+    <tr>
+    <th>Customer Name</th>
+    <th>Products</th>
+    <th>Quantity</th>
+    <th>Date Created</th>
+    </tr>
+      <tr ng-repeat="order in orders | filter:filter_name | orderBy:'name'">
+          <td>{{ order.name }}</td>
+           <td>{{ order.product }}</td>
+           <td>{{ order.quantity }}</td>
+           <td>{{ order.date | date: formate: longdate }}</td>
+      </tr> 
+    </table>
+  </div>

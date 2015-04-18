@@ -1,0 +1,185 @@
+<html ng-app="gameApp">
+	<title>Play Game</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+	 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
+
+<script src="script.js"></script>
+<script>
+
+gameApp.controller('PlaysController', function ($scope, PlayFactory, QuestionFactory){           
+      PlayFactory.getPlays(function(res_fac){
+        $scope.plays = res_fac;
+      })
+      function updatePlays(){
+          PlayFactory.getPlays(function(output){
+          $scope.plays = output;
+         });
+      }  
+         
+      $scope.addPlay = function(){
+        PlayFactory.addPlay($scope.new_play, function(data){
+          // $scope.customers = data;
+          // $scope.new_customer = {};
+        })
+        PlayFactory.getPlays(function(res_fac){
+          $scope.plays = res_fac;
+        })
+      }
+      $scope.removePlay = function(play){
+        console.log(play);
+         PlayFactory.removePlay(play, function(data){
+         // $scope.customers = data;
+        })
+         PlayFactory.getPlays(function(res_fac){
+           $scope.plays = res_fac;
+         })
+      }
+
+	gameApp.factory('PlayFactory', function($http){
+	  var factory = {};
+	  var plays = [];
+	  factory.getPlays = function(callback){
+	       $http.get('/plays').success(function(resdata){
+	         plays = resdata;
+	         callback(plays);
+	       })
+	  }
+	  factory.addPlay = function(data, callback){
+	     $http.post('/plays', {name: data}).success(function(somedata){
+	       //customers.push({name:data.name, date:data.date})
+	       //callback(customers);
+	     })
+	  }
+	  factory.removePlay = function(data, callback){
+
+	    $http.post('/remove_play', data).success(function(response)
+	    {
+
+	    })
+	  }
+	  return factory;
+	})
+
+
+	gameApp.controller('UsersController', function ($scope, UserFactory, PlayFactory, QuestionFactory){
+      UserFactory.getUsers(function(res_fac){
+        $scope.users = res_fac;
+      })
+      
+         
+      $scope.addUser = function(){
+        UserFactory.addUser($scope.new_user, function(data){
+          // $scope.customers = data;
+          // $scope.new_customer = {};
+        })
+        UserFactory.getUsers(function(res_fac){
+          $scope.users = res_fac;
+        })
+      }
+  });
+
+	gameApp.factory('UserFactory', function($http){
+	  var factory = {};
+	  var users = [];
+	  factory.getUsers = function(callback){
+	       $http.get('/users').success(function(resdata){
+	         users = resdata;
+	         callback(users);
+	       })
+	  }
+	  factory.addUser = function(data, callback){
+	     $http.post('/users', {name: data}).success(function(somedata){
+	       //customers.push({name:data.name, date:data.date})
+	       //callback(customers);
+	     })
+	  }	  
+	  return factory;
+	})
+
+
+	gameApp.controller('QuestionsController', function ($scope, PlayFactory, QuestionFactory){           
+      QuestionFactory.getQuestions(function(res_fac){
+        $scope.questions = res_fac;
+      })
+      function updateQuestions(){
+          QuestionFactory.getQuestions(function(output){
+          $scope.questions = output;
+         });
+      }  
+         
+      $scope.addQuestion = function(){
+        QuestionFactory.addQuestion($scope.new_question, function(data){
+          // $scope.customers = data;
+          // $scope.new_customer = {};
+        })
+        QuestionFactory.getQuestions(function(res_fac){
+          $scope.questions = res_fac;
+        })
+      }
+      $scope.removeQuestion = function(play){
+        console.log(play);
+         QuestionFactory.removeQuestion(question, function(data){
+         // $scope.customers = data;
+        })
+         QuestionFactory.getQuestions(function(res_fac){
+           $scope.questions = res_fac;
+         })
+      }
+
+
+	gameApp.factory('QuestionFactory', function($http){
+	  var factory = {};
+	  var questions = [];
+	  factory.getQuestions = function(callback){
+	       $http.get('/questions').success(function(resdata){
+	         questions = resdata;
+	         callback(questions);
+	       })
+	  }
+	  factory.addQuestion = function(data, callback){
+	     $http.post('/questions', {name: data}).success(function(somedata){
+	       //customers.push({name:data.name, date:data.date})
+	       //callback(customers);
+	     })
+	  }
+	  factory.removeQuestion = function(data, callback){
+
+	    $http.post('/remove_question', data).success(function(response)
+	    {
+
+	    })
+	  }
+	  return factory;
+	})
+</script>
+
+
+<body>
+	<div>
+	        <a href="#/">Home</a> | <a href="#/AddQuestion">AddQuestion</a> 
+	        <h3>Click Here To Play</h3>
+	        <p><a href="#/Play">Play</a></p>
+	        <p><button ng-click="Play">Play</button></p>
+	</div>
+         <input type="text" ng-model="filter_name" placeholder="filter">
+   			{{filter_name}}
+			  <table>
+    			<tr>
+	   				 <th>User Name</th>
+	   				 <th>Score</th>
+	   				 <th>Percentage</th>
+   				 </tr>
+			      <tr ng-repeat="user in users | filter:filter_name | orderBy:'name'">
+			          <td>{{ user.name }}</td>
+			          <td>{{ user.score }}</td>
+			          <td>{{ user.percentage }}</td>
+			      </tr> 
+    		</table>
+ 
+   <div ng-view="">
+
+
+   </div>
+
+</body>
+</html>

@@ -1,0 +1,18 @@
+<div ng-controller="UsersController">
+ 
+  <input type="text" ng-model="filter_name" placeholder="filter">
+   {{filter_name}}
+<p>{{message}}</p>
+  <table>
+    <tr>
+    <th>User Name</th>
+    <th>Score</th>
+    <th>Percentage</th>
+    </tr>
+      <tr ng-repeat="user in users | filter:filter_name | orderBy:'name'">
+          <td>{{ user.name }}</td>
+          <td>{{ user.score }}</td>
+          <td>{{ user.percentage }}</td>
+      </tr> 
+    </table>
+  </div>
